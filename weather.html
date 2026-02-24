@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Disaster Rescue Management | Weather Dashboard</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+:root{
+  --primary:#0b5ed7;
+  --primary-dark:#084298;
+  --bg:#eef2f7;
+  --white:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#d9dee6;
+  --header:#f1f5ff;
+}
+
+/* RESET */
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* HEADER */
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 26px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  color:#fff;
+  box-shadow:0 6px 20px rgba(0,0,0,.2);
+}
+header h1{
+  font-size:18px;
+  font-weight:600;
+}
+header i{
+  font-size:18px;
+  cursor:pointer;
+}
+
+/* PAGE TITLE */
+.page-title{
+  padding:18px 26px 6px;
+}
+.page-title h2{
+  margin:0;
+  font-size:22px;
+  font-weight:600;
+}
+
+/* STATUS BAR */
+.status-bar{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  padding:6px 26px 16px;
+}
+.status{
+  background:var(--white);
+  border:1px solid var(--border);
+  padding:6px 14px;
+  font-size:12px;
+  border-radius:20px;
+}
+.status.primary{
+  color:var(--primary);
+  font-weight:600;
+}
+
+/* TABLE CONTAINER */
+.container{
+  margin:0 26px 40px;
+  background:var(--white);
+  border:1px solid var(--border);
+  border-radius:10px;
+  overflow:hidden;
+}
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+thead{
+  background:var(--header);
+}
+
+thead th{
+  padding:14px 14px;
+  font-size:14px;
+  text-align:left;
+  font-weight:600;
+  color:var(--primary-dark);
+  border-bottom:1px solid var(--border);
+}
+
+tbody td{
+  padding:14px 14px;
+  font-size:14px;
+  border-bottom:1px solid var(--border);
+}
+
+tbody tr:hover{
+  background:#f9fbff;
+}
+
+/* PARAMETER CELL */
+.param{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-weight:500;
+}
+
+.param i{
+  color:var(--primary);
+  font-size:18px;
+  min-width:20px;
+}
+
+/* VALUE */
+.value{
+  font-weight:600;
+  color:#000;
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  thead th, tbody td{
+    font-size:13px;
+    padding:12px 10px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <i class="fas fa-arrow-left" onclick="location.href='Home.html'"></i>
+  <h1>Disaster Rescue Management</h1>
+  <i class="fas fa-bell"></i>
+</header>
+
+<div class="page-title">
+  <h2>Live Weather Status</h2>
+</div>
+
+<div class="status-bar">
+  <div class="status primary" id="updated">Waiting for update…</div>
+  <div class="status" id="valid">Valid till: --</div>
+  <div class="status" id="next">Next update: --</div>
+</div>
+
+<div class="container">
+<table>
+  <thead>
+    <tr>
+      <th style="width:50%">Weather Parameter</th>
+      <th style="width:30%">Observed Value</th>
+      <th style="width:20%">Unit</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td class="param"><i class="fa-solid fa-temperature-high"></i> Air Temperature</td>
+      <td class="value" id="temp">--</td>
+      <td>°C</td>
+    </tr>
+    <tr>
+      <td class="param"><i class="fa-solid fa-droplet"></i> Relative Humidity</td>
+      <td class="value" id="humidity">--</td>
+      <td>%</td>
+    </tr>
+    <tr>
+      <td class="param"><i class="fa-solid fa-wind"></i> Wind Speed</td>
+      <td class="value" id="wind">--</td>
+      <td>km/h</td>
+    </tr>
+    <tr>
+      <td class="param"><i class="fa-solid fa-cloud-showers-heavy"></i> Rainfall</td>
+      <td class="value" id="rain">--</td>
+      <td>mm</td>
+    </tr>
+    <tr>
+      <td class="param"><i class="fa-solid fa-eye"></i> Visibility</td>
+      <td class="value" id="visibility">--</td>
+      <td>m</td>
+    </tr>
+    <tr>
+      <td class="param"><i class="fa-solid fa-mountain-sun"></i> Soil Temperature</td>
+      <td class="value" id="soil">--</td>
+      <td>°C</td>
+    </tr>
+    <tr>
+      <td class="param"><i class="fa-solid fa-umbrella"></i> Precipitation Probability</td>
+      <td class="value" id="prob">--</td>
+      <td>%</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+<script>
+const API="https://api.open-meteo.com/v1/forecast?latitude=16.705&longitude=74.2433&daily=temperature_2m_max,temperature_2m_min,sunrise,sunset&hourly=temperature_2m,rain,precipitation_probability,visibility,wind_speed_10m,wind_direction_10m,temperature_80m,relative_humidity_2m";
+const UPDATE=5;
+
+async function loadWeather(){
+  try{
+    const r=await fetch(API);
+    const d=await r.json();
+    const now=new Date();
+    const key=now.toISOString().slice(0,13);
+    const i=d.hourly.time.findIndex(t=>t.startsWith(key));
+    if(i<0)return;
+
+    temp.textContent=d.hourly.temperature_2m[i];
+    humidity.textContent=d.hourly.relative_humidity_2m[i];
+    wind.textContent=d.hourly.wind_speed_10m[i];
+    rain.textContent=d.hourly.rain[i];
+    visibility.textContent=d.hourly.visibility[i];
+    soil.textContent=d.hourly.soil_temperature_0cm[i];
+    prob.textContent=d.hourly.precipitation_probability[i];
+
+    updated.textContent="Updated at "+now.toLocaleTimeString();
+    valid.textContent="Valid till "+new Date(now.getTime()+UPDATE*60000).toLocaleTimeString();
+  }catch{
+    updated.textContent="Data unavailable";
+  }
+}
+
+function timer(){
+  const n=new Date();
+  const m=(UPDATE-1)-(n.getMinutes()%UPDATE);
+  const s=59-n.getSeconds();
+  next.textContent=`Next update in ${m}m ${s}s`;
+  if(m===0 && s===0) loadWeather();
+}
+
+loadWeather();
+setInterval(timer,1000);
+</script>
+
+</body>
+</html>

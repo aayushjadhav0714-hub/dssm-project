@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Dos and Don'ts | Disaster Rescue Management</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+:root{
+  --primary:#0b5ed7;
+  --primary-dark:#084298;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --radius:14px;
+  --shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+*{box-sizing:border-box;}
+
+body{
+  margin:0;
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* HEADER */
+header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 28px;
+    background:linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color:#fff;
+    box-shadow:0 8px 25px rgba(0,0,0,0.2);
+}
+
+header h1{
+    font-size:18px;
+    font-weight:600;
+}
+
+header i{
+    font-size:20px;
+    cursor:pointer;
+}
+
+
+/* PAGE TITLE */
+.page-title{
+  padding:18px 24px 10px;
+}
+
+.page-title h2{
+  margin:0;
+  font-size:22px;
+  font-weight:600;
+}
+
+/* SECTIONS */
+.section-title{
+  margin:12px 24px;
+  font-size:18px;
+  font-weight:600;
+  color:var(--primary-dark);
+}
+
+.instruction-container{
+  margin:0 18px 40px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.instruction-card{
+  background:#fff;
+  padding:16px 20px;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  display:flex;
+  align-items:flex-start;
+  gap:14px;
+  transition:transform 0.2s;
+}
+
+.instruction-card:hover{
+  transform:scale(1.02);
+}
+
+.instruction-card i{
+  font-size:28px;
+  flex-shrink:0;
+}
+
+.instruction-card.dos i{
+  color:#0b5ed7;
+}
+
+.instruction-card.donts i{
+  color:#d32f2f;
+}
+
+.instruction-card .text{
+  font-size:15px;
+  color:var(--text);
+  line-height:1.5;
+}
+
+.instruction-card .text strong{
+  color:var(--primary-dark);
+}
+
+/* MOBILE */
+@media(max-width:600px){
+  .instruction-card i{
+    font-size:24px;
+  }
+  .instruction-card .text{
+    font-size:14px;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <i class="fas fa-arrow-left" onclick="location.href='Home.html'"></i>
+  <h1>Disaster Rescue Management</h1>
+  <i class="fas fa-bell"></i>
+</header>
+
+<!-- PAGE TITLE -->
+<div class="page-title">
+  <h2>Dos and Don'ts</h2>
+</div>
+
+<!-- DOS -->
+<div class="section-title">✅ Dos</div>
+<div class="instruction-container">
+  <div class="instruction-card dos"><i class="fa-solid fa-hand-holding-water"></i><div class="text"><strong>Stay Hydrated:</strong> Drink plenty of clean water during emergencies.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-person-running"></i><div class="text"><strong>Follow Evacuation Routes:</strong> Use designated safe routes during disasters.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-kit-medical"></i><div class="text"><strong>Keep Emergency Kit Ready:</strong> Include first aid, medicines, flashlights, and food supplies.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-bell"></i><div class="text"><strong>Stay Updated:</strong> Follow official alerts and advisories.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-hands-helping"></i><div class="text"><strong>Assist Others:</strong> Help elderly, children, and disabled individuals.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-shield"></i><div class="text"><strong>Wear Safety Gear:</strong> Helmets, masks, or life jackets when needed.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-fire-extinguisher"></i><div class="text"><strong>Know Fire Safety:</strong> Keep extinguishers and fire blankets handy.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-house-chimney"></i><div class="text"><strong>Secure Your Home:</strong> Lock doors/windows, switch off gas and electricity during disasters.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-hospital"></i><div class="text"><strong>Medical Assistance:</strong> Know nearest hospitals and emergency numbers.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-lightbulb"></i><div class="text"><strong>Be Informed:</strong> Understand local hazards like floods, cyclones, or earthquakes.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-person-falling"></i><div class="text"><strong>Practice Evacuation Drills:</strong> Prepare for quick exit safely.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-utensils"></i><div class="text"><strong>Safe Food Storage:</strong> Keep dry and non-perishable food ready.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-bolt"></i><div class="text"><strong>Electrical Safety:</strong> Disconnect power when not in use.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-hand-holding-heart"></i><div class="text"><strong>Stay Calm:</strong> Keep composure to think clearly and help others.</div></div>
+  <div class="instruction-card dos"><i class="fa-solid fa-phone"></i><div class="text"><strong>Keep Communication Ready:</strong> Charge phones, have backup power or radios.</div></div>
+</div>
+
+<!-- DON'TS -->
+<div class="section-title">❌ Don'ts</div>
+<div class="instruction-container">
+  <div class="instruction-card donts"><i class="fa-solid fa-car-crash"></i><div class="text"><strong>Avoid Driving Through Flooded Areas:</strong> Risk of drowning or vehicle damage is high.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-fire"></i><div class="text"><strong>Do Not Use Open Flames:</strong> Avoid candles or fires during gas leaks or flammable conditions.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-phone-slash"></i><div class="text"><strong>Do Not Spread Rumors:</strong> Share only official updates to avoid panic.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-bolt"></i><div class="text"><strong>Do Not Touch Fallen Power Lines:</strong> Stay away from live electrical hazards.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-house-fire"></i><div class="text"><strong>Do Not Enter Unsafe Buildings:</strong> Avoid structures damaged by disasters without clearance.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-hand-paper"></i><div class="text"><strong>Do Not Panic:</strong> Panic can cause mistakes and accidents.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-people-arrows"></i><div class="text"><strong>Do Not Crowd:</strong> Avoid overcrowding relief centers and safe zones.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-water"></i><div class="text"><strong>Do Not Drink Contaminated Water:</strong> Avoid water from unsafe sources.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-cut"></i><div class="text"><strong>Do Not Neglect Injuries:</strong> Treat wounds immediately to prevent infection.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-trash"></i><div class="text"><strong>Do Not Litter:</strong> Keep environment clean to avoid additional hazards.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-smoke"></i><div class="text"><strong>Do Not Inhale Smoke or Toxic Gas:</strong> Cover nose/mouth with cloth or mask.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-gas-pump"></i><div class="text"><strong>Do Not Use Gas Appliances During Emergencies:</strong> Prevent accidental fires or explosions.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-hand-holding-hand"></i><div class="text"><strong>Do Not Leave Vulnerable People Alone:</strong> Keep children, elderly, and disabled safe.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-car-burst"></i><div class="text"><strong>Do Not Drive Recklessly:</strong> Only drive if necessary, follow traffic rules during emergencies.</div></div>
+  <div class="instruction-card donts"><i class="fa-solid fa-skull-crossbones"></i><div class="text"><strong>Do Not Ignore Official Warnings:</strong> Follow government and local authority instructions strictly.</div></div>
+</div>
+
+</body>
+</html>

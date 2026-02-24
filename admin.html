@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin - Reports</title>
+  <style>
+    body{
+      font-family: Arial;
+      background:#f4f6f9;
+      padding:20px;
+    }
+    h2{
+      color:#0b5ed7;
+      text-align:center;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      background:#fff;
+      margin-top:20px;
+    }
+    th, td{
+      border:1px solid #ddd;
+      padding:10px;
+      text-align:left;
+    }
+    th{
+      background:#0b5ed7;
+      color:#fff;
+    }
+    tr:nth-child(even){
+      background:#f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<h2>📋 Emergency Reports (Admin)</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Mobile</th>
+      <th>Disaster</th>
+      <th>Date & Time</th>
+      <th>Location</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody id="reportTable"></tbody>
+</table>
+</body>
+</html>

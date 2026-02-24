@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script type='text/javascript'>
+  window.smartlook||(function(d) {
+    var o=smartlook=function(){ o.api.push(arguments)},h=d.getElementsByTagName('head')[0];
+    var c=d.createElement('script');o.api=new Array();c.async=true;c.type='text/javascript';
+    c.charset='utf-8';c.src='https://web-sdk.smartlook.com/recorder.js';h.appendChild(c);
+    })(document);
+    smartlook('init', 'a6ec51cab4d849bb14b3f71884435e29701bdec0', { region: 'eu' });
+</script>
+    <meta charset="UTF-8">
+    <title>Disaster Rescue Management</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+    <style>
+        *{
+            box-sizing: border-box;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        body{
+            margin: 0;
+            background: #f4f7fb;
+        }
+
+        /* HEADER */
+        header{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px 30px;
+            background: linear-gradient(135deg, #2196f3, #21cbf3);
+            color: white;
+            border-bottom-left-radius: 35px;
+            border-bottom-right-radius: 35px;
+        }
+
+        header h1{
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        header i{
+            font-size: 22px;
+            cursor: pointer;
+        }
+
+        /* CONTAINER */
+        .container{
+            padding: 25px;
+            display: grid;
+            grid-template-columns: repeat(2,1fr);
+            gap: 20px;
+        }
+
+        /* CARD */
+        .card{
+            background: white;
+            border-radius: 18px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .card:hover{
+            transform: translateY(-6px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.12);
+        }
+
+        .card i{
+            font-size: 36px;
+            margin-bottom: 12px;
+            color: #2196f3;
+        }
+
+        .card p{
+            font-size: 16px;
+            font-weight: 500;
+            margin: 0;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        /* ICON COLORS */
+        .report i{ color:#e53935; }
+        .map i{ color:#43a047; }
+        .weather i{ color:#fb8c00; }
+        .safety i{ color:#3949ab; }
+        .dos i{ color:#00897b; }
+        .contact i{ color:#6a1b9a; }
+
+    </style>
+</head>
+
+<body>
+
+<header>
+    <i class="fas fa-bars"></i>
+    <h1>Disaster Rescue Management</h1>
+    <i class="fas fa-bell"></i>
+</header>
+
+<div class="container">
+    <div class="card report" onclick="location.href='Report.html'">
+        <i class="fas fa-book" ></i>
+        <p>Report<br>Disaster</p>
+    </div>
+
+    <div class="card map" onclick="location.href='Map.html'">
+        <i class="fas fa-map-location-dot"></i>
+        <p>Live Map</p>
+    </div>
+
+    <div class="card weather"onclick="location.href='weather.html'">
+        <i class="fas fa-cloud-sun"></i>
+        <p>Weather</p>
+    </div>
+
+    <div class="card safety" onclick="location.href='safety_instruction.html'">
+        <i class="fas fa-circle-info"></i>
+        <p>Safety<br>Instructions</p>
+    </div>
+
+    <div class="card dos" onclick="location.href='Dos-donts.html'">
+        <i class="fas fa-list-check"></i>
+        <p>Do's &<br>Don'ts</p>
+    </div>
+
+    <div class="card contact" onclick="location.href='contact.html'">
+        <i class="fas fa-phone-volume"></i>
+        <p>Emergency<br>Contacts</p>
+    </div>
+</div>
+
+</body>
+</html>
