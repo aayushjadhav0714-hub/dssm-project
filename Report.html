@@ -22,6 +22,7 @@
   --border:#d1d5db;
   --radius:14px;
   --success:#28a745;
+  --success-bg: #28a745;
 }
 
 *{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
@@ -106,6 +107,7 @@ textarea{resize:none;height:120px}
   width:100%;
   border-radius:12px;
   margin-top:10px;
+  z-index: 1;
 }
 
 .btn-primary{
@@ -119,7 +121,7 @@ textarea{resize:none;height:120px}
   cursor:pointer;
 }
 
-/* Success Modal */
+/* --- Improved Success Modal (Based on Image) --- */
 #popupModal{
   display:none;
   position:fixed;
@@ -128,19 +130,76 @@ textarea{resize:none;height:120px}
   background:rgba(0,0,0,0.6);
   justify-content:center;
   align-items:center;
+  z-index: 9999;
 }
 
 .modal-content{
   background:#fff;
-  padding:25px;
-  border-radius:16px;
-  max-width:400px;
-  width:90%;
-  text-align:center;
+  padding:30px;
+  border-radius:24px;
+  max-width:480px;
+  width:92%;
+  text-align:left; /* Image प्रमाणे मजकूर डाव्या बाजूला */
+  box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
-.modal-content h3{
-  color:var(--success);
+.modal-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.modal-header i {
+    color: #00c853; /* Bright green check */
+    font-size: 28px;
+}
+
+.modal-header h3 {
+    color: #0062ff; /* Blue text */
+    margin: 0;
+    font-size: 22px;
+}
+
+.modal-body p {
+    font-size: 15px;
+    color: #444;
+    line-height: 1.5;
+    margin-bottom: 20px;
+}
+
+.next-steps-title {
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+
+.steps-list {
+    padding-left: 20px;
+    margin-bottom: 20px;
+}
+
+.steps-list li {
+    font-size: 14px;
+    color: #444;
+    margin-bottom: 8px;
+}
+
+.response-info {
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+
+.btn-ok {
+    width: 100%;
+    padding: 14px;
+    background: #28a745;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -221,9 +280,26 @@ textarea{resize:none;height:120px}
 
 <div id="popupModal">
   <div class="modal-content">
-    <h3>✅ Report Submitted Successfully</h3>
-    <p>Your report has been sent to the admin dashboard.</p>
-    <button onclick="closeMyModal()" style="width:100%;padding:10px;background:#28a745;color:#fff;border:none;border-radius:8px;">OK</button>
+    <div class="modal-header">
+        <i class="fas fa-check-square"></i>
+        <h3>Report Submitted Successfully</h3>
+    </div>
+    <div class="modal-body">
+        <p>Thank you for reporting the incident. Our disaster response team has received your report.</p>
+        
+        <div class="next-steps-title">Next Steps:</div>
+        <ul class="steps-list">
+            <li>Stay calm and remain at a safe location.</li>
+            <li>Emergency responders have been notified and are on their way.</li>
+            <li id="reportedLocDisplay">Your reported location: Lat --, Lng --</li>
+        </ul>
+
+        <div class="response-info">
+            <strong>Estimated Response Time:</strong> 15–30 minutes.<br>
+            For urgent assistance, call: <strong>+91-123-456-7890</strong>.
+        </div>
+    </div>
+    <button class="btn-ok" onclick="closeMyModal()">OK</button>
   </div>
 </div>
 
@@ -233,16 +309,14 @@ const SUPABASE_URL = 'https://idogfmuksxbjjmrfdclk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_49Wi0aMQU0u1YF4nF3PQvg_WbwUscRs';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 🔹 AUTO DATE-TIME FUNCTION
+// 🔹 AUTO DATE-TIME
 const datetimeInput = document.getElementById("datetimeInput");
-
 function setCurrentDateTime(){
   const now = new Date();
   const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
   datetimeInput.value = local.toISOString().slice(0,16);
 }
-
-setCurrentDateTime(); // page load var auto fill
+setCurrentDateTime(); 
 
 // 🔹 MAP LOGIC
 let map, marker;
@@ -261,22 +335,15 @@ function initMap(lat, lng) {
 }
 
 function updateLocationText(lat, lng) {
-    locationInput.value = `Lat ${lat.toFixed(6)}, Lng ${lng.toFixed(6)}`;
+    const locStr = `Lat ${lat.toFixed(6)}, Lng ${lng.toFixed(6)}`;
+    locationInput.value = locStr;
+    document.getElementById("reportedLocDisplay").innerText = `Your reported location: ${locStr}`;
 }
 
 navigator.geolocation.getCurrentPosition(
-  (position) => {
-    initMap(position.coords.latitude, position.coords.longitude);
-  },
-  (error) => {
-    console.log("Location error:", error.message);
-    initMap(19.0760, 72.8777); // fallback Mumbai
-  },
-  {
-    enableHighAccuracy: false,  // 🔥 fast mode
-    timeout: 5000,              // max 5 sec wait
-    maximumAge: 60000           // last known location use kara (1 min)
-  }
+  (position) => { initMap(position.coords.latitude, position.coords.longitude); },
+  (error) => { initMap(19.0760, 72.8777); },
+  { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
 );
 
 // 🔹 FORM SUBMIT
@@ -292,9 +359,7 @@ form.addEventListener("submit", async (e) => {
         datetime: datetimeInput.value,
     };
 
-    const { error } = await _supabase
-        .from('Report')
-        .insert([reportData]);
+    const { error } = await _supabase.from('Report').insert([reportData]);
 
     if (!error) {
         document.getElementById("popupModal").style.display = "flex";
@@ -306,7 +371,7 @@ form.addEventListener("submit", async (e) => {
 function closeMyModal(){
     document.getElementById("popupModal").style.display="none";
     form.reset();
-    setCurrentDateTime(); // reset nantar punha auto fill
+    setCurrentDateTime(); 
 }
 </script>
 
