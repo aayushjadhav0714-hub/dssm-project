@@ -265,8 +265,18 @@ function updateLocationText(lat, lng) {
 }
 
 navigator.geolocation.getCurrentPosition(
-    p => initMap(p.coords.latitude, p.coords.longitude),
-    () => initMap(19.0760, 72.8777)
+  (position) => {
+    initMap(position.coords.latitude, position.coords.longitude);
+  },
+  (error) => {
+    console.log("Location error:", error.message);
+    initMap(19.0760, 72.8777); // fallback Mumbai
+  },
+  {
+    enableHighAccuracy: false,  // 🔥 fast mode
+    timeout: 5000,              // max 5 sec wait
+    maximumAge: 60000           // last known location use kara (1 min)
+  }
 );
 
 // 🔹 FORM SUBMIT
