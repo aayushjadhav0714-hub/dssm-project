@@ -22,7 +22,6 @@
   --border:#d1d5db;
   --radius:14px;
   --success:#28a745;
-  --success-bg: #28a745;
 }
 
 *{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
@@ -139,7 +138,7 @@ textarea{resize:none;height:120px}
   border-radius:24px;
   max-width:480px;
   width:92%;
-  text-align:left; /* Image प्रमाणे मजकूर डाव्या बाजूला */
+  text-align:left;
   box-shadow: 0 15px 35px rgba(0,0,0,0.2);
 }
 
@@ -151,12 +150,12 @@ textarea{resize:none;height:120px}
 }
 
 .modal-header i {
-    color: #00c853; /* Bright green check */
+    color: #00c853; 
     font-size: 28px;
 }
 
 .modal-header h3 {
-    color: #0062ff; /* Blue text */
+    color: #0062ff; 
     margin: 0;
     font-size: 22px;
 }
@@ -304,12 +303,10 @@ textarea{resize:none;height:120px}
 </div>
 
 <script>
-// 🔹 SUPABASE CONFIG
 const SUPABASE_URL = 'https://idogfmuksxbjjmrfdclk.supabase.co'; 
 const SUPABASE_KEY = 'sb_publishable_49Wi0aMQU0u1YF4nF3PQvg_WbwUscRs';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// 🔹 AUTO DATE-TIME
 const datetimeInput = document.getElementById("datetimeInput");
 function setCurrentDateTime(){
   const now = new Date();
@@ -318,11 +315,11 @@ function setCurrentDateTime(){
 }
 setCurrentDateTime(); 
 
-// 🔹 MAP LOGIC
 let map, marker;
 const locationInput = document.getElementById("locationInput");
 
 function initMap(lat, lng) {
+    if (map) return; // Prevent double init
     map = L.map("map").setView([lat, lng], 15);
     L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
     marker = L.marker([lat, lng], {draggable: true}).addTo(map);
@@ -340,27 +337,40 @@ function updateLocationText(lat, lng) {
     document.getElementById("reportedLocDisplay").innerText = `Your reported location: ${locStr}`;
 }
 
-navigator.geolocation.getCurrentPosition(
-  (position) => { initMap(position.coords.latitude, position.coords.longitude); },
-  (error) => { initMap(19.0760, 72.8777); },
-  { enableHighAccuracy: false, timeout: 5000, maximumAge: 60000 }
-);
+// 🔹 FIXED AUTO-LOCATION LOGIC
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                initMap(position.coords.latitude, position.coords.longitude);
+            },
+            (error) => {
+                console.warn("Location error, using fallback:", error.message);
+                initMap(19.0760, 72.8777); // Default Mumbai
+            },
+            {
+                enableHighAccuracy: true, // GPS focus
+                timeout: 10000, 
+                maximumAge: 0 
+            }
+        );
+    } else {
+        initMap(19.0760, 72.8777);
+    }
+}
 
-// 🔹 FORM SUBMIT
+window.onload = getLocation;
+
 const form = document.getElementById("reportForm");
-
 form.addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const reportData = {
         fullname: document.getElementById("fullname").value,
         mobile: document.getElementById("mobile").value,
         location: locationInput.value,
         datetime: datetimeInput.value,
     };
-
     const { error } = await _supabase.from('Report').insert([reportData]);
-
     if (!error) {
         document.getElementById("popupModal").style.display = "flex";
     } else {
@@ -374,6 +384,5 @@ function closeMyModal(){
     setCurrentDateTime(); 
 }
 </script>
-
 </body>
 </html>
