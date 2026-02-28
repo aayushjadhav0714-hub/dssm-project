@@ -1,90 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Disaster Rescue Management</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+<meta charset="UTF-8">
+<title>Disaster Rescue Management</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
-    <style>
-        /* Base Styles */
-        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
-        body { 
-            margin: 0; 
-            background: #f4f7fb; 
-            display: flex; 
-            flex-direction: column; 
-            height: 100vh; /* Full viewport height */
-            overflow: hidden; /* Body la scroll hou naye mhanun */
-        }
+<style>
+* {
+    box-sizing: border-box;
+    font-family: 'Segoe UI', sans-serif;
+}
 
-        /* HEADER */
-        header {
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 20px 25px; background: linear-gradient(135deg, #2196f3, #21cbf3);
-            color: white; border-bottom-left-radius: 30px; border-bottom-right-radius: 30px;
-            z-index: 10;
-        }
+body {
+    margin: 0;
+    background: #f4f7fb;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
 
-        /* SCROLLABLE CONTENT AREA */
-        .content { 
-            flex: 1; 
-            overflow-y: auto; /* Fakt content area scroll hoil */
-            padding-bottom: 100px; /* Footer sathi jaga sodli aahe */
-        }
+/* HEADER */
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 25px;
+    background: linear-gradient(135deg, #2196f3, #21cbf3);
+    color: white;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
 
-        .container {
-            padding: 20px; display: grid; grid-template-columns: repeat(2,1fr); gap: 15px;
-        }
+/* CONTENT AREA */
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding-bottom: 80px; /* footer overlap honar nahi */
+}
 
-        .card {
-            background: white; border-radius: 18px; padding: 25px 10px; text-align: center;
-            box-shadow: 0 8px 15px rgba(0,0,0,0.05); transition: 0.3s; cursor: pointer;
-        }
-        .card:active { transform: scale(0.95); }
-        .card i { font-size: 32px; margin-bottom: 10px; }
-        .card p { font-size: 15px; font-weight: 500; margin: 0; color: #333; }
+.container {
+    padding: 20px;
+    display: grid;
+    grid-template-columns: repeat(2,1fr);
+    gap: 15px;
+}
 
-        /* ICON COLORS */
-        .report i { color:#e53935; } .map i { color:#43a047; } .weather i { color:#fb8c00; }
-        .safety i { color:#3949ab; } .dos i { color:#00897b; } .contact i { color:#6a1b9a; }
+.card {
+    background: white;
+    border-radius: 18px;
+    padding: 25px 10px;
+    text-align: center;
+    box-shadow: 0 8px 15px rgba(0,0,0,0.05);
+    transition: 0.3s;
+    cursor: pointer;
+}
 
-        /* --- FIXED BOTTOM FOOTER --- */
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: white;
-            border-top: 1px solid #ddd;
-            padding: 10px 0;
-            z-index: 100;
-        }
+.card:active { transform: scale(0.95); }
 
-        .scroll-wrapper {
-            display: flex;
-            overflow: hidden;
-            width: 100%;
-        }
+.card i {
+    font-size: 32px;
+    margin-bottom: 10px;
+}
 
-        .scroll-container {
-            display: flex;
-            align-items: center;
-            white-space: nowrap;
-            animation: continuousScroll 15s linear infinite;
-        }
+.card p {
+    font-size: 15px;
+    font-weight: 500;
+    margin: 0;
+    color: #333;
+}
 
-        .scroll-container img {
-            height: 40px;
-            margin: 0 20px;
-            object-fit: contain;
-        }
+/* ICON COLORS */
+.report i { color:#e53935; }
+.map i { color:#43a047; }
+.weather i { color:#fb8c00; }
+.safety i { color:#3949ab; }
+.dos i { color:#00897b; }
+.contact i { color:#6a1b9a; }
 
-        @keyframes continuousScroll {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-50%); }
-        }
-    </style>
+/* FOOTER */
+footer {
+    background: white;
+    border-top: 1px solid #ddd;
+    padding: 10px 0;
+    position: sticky;   /* 🔥 FIXED */
+    bottom: 0;
+    width: 100%;
+    z-index: 1;         /* popup la disturb nahi karnaar */
+}
+
+.scroll-wrapper {
+    overflow: hidden;
+    width: 100%;
+}
+
+.scroll-container {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: continuousScroll 15s linear infinite;
+}
+
+.scroll-container img {
+    height: 40px;
+    margin: 0 20px;
+    object-fit: contain;
+}
+
+@keyframes continuousScroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* IMPORTANT: popup always top la yenar */
+.popup,
+.modal,
+.leaflet-popup {
+    z-index: 9999 !important;
+}
+
+</style>
 </head>
 
 <body>
@@ -97,26 +132,59 @@
 
 <div class="content">
     <div class="container">
-        <div class="card report" onclick="location.href='Report.html'"><i class="fas fa-file-medical"></i><p>Report<br>Disaster</p></div>
-        <div class="card map" onclick="location.href='Map.html'"><i class="fas fa-map-location-dot"></i><p>Live Map</p></div>
-        <div class="card weather" onclick="location.href='weather.html'"><i class="fas fa-cloud-sun"></i><p>Weather</p></div>
-        <div class="card safety" onclick="location.href='safety_instruction.html'"><i class="fas fa-circle-info"></i><p>Safety Tips</p></div>
-        <div class="card dos" onclick="location.href='Dos-donts.html'"><i class="fas fa-list-check"></i><p>Do's & Don'ts</p></div>
-        <div class="card contact" onclick="location.href='contact.html'"><i class="fas fa-phone-volume"></i><p>Emergency</p></div>
+        <div class="card report" onclick="location.href='Report.html'">
+            <i class="fas fa-file-medical"></i>
+            <p>Report<br>Disaster</p>
+        </div>
+
+        <div class="card map" onclick="location.href='Map.html'">
+            <i class="fas fa-map-location-dot"></i>
+            <p>Live Map</p>
+        </div>
+
+        <div class="card weather" onclick="location.href='weather.html'">
+            <i class="fas fa-cloud-sun"></i>
+            <p>Weather</p>
+        </div>
+
+        <div class="card safety" onclick="location.href='safety_instruction.html'">
+            <i class="fas fa-circle-info"></i>
+            <p>Safety Tips</p>
+        </div>
+
+        <div class="card dos" onclick="location.href='Dos-donts.html'">
+            <i class="fas fa-list-check"></i>
+            <p>Do's & Don'ts</p>
+        </div>
+
+        <div class="card contact" onclick="location.href='contact.html'">
+            <i class="fas fa-phone-volume"></i>
+            <p>Emergency</p>
+        </div>
     </div>
 </div>
 
 <footer>
     <div class="scroll-wrapper">
         <div class="scroll-container">
-            <img src="s1.png" alt="Logo"> <img src="s2.png" alt="Logo">
-            <img src="s3.png" alt="Logo"> <img src="s4.jpg" alt="Logo">
-            <img src="s7.png" alt="Logo"> <img src="s8.png" alt="Logo">
-            <img src="s9.png" alt="Logo"> <img src="s10.png" alt="Logo">
-            <img src="s1.png" alt="Logo"> <img src="s2.png" alt="Logo">
-            <img src="s3.png" alt="Logo"> <img src="s4.jpg" alt="Logo">
-            <img src="s7.png" alt="Logo"> <img src="s8.png" alt="Logo">
-            <img src="s9.png" alt="Logo"> <img src="s10.png" alt="Logo">
+            <img src="s1.png">
+            <img src="s2.png">
+            <img src="s3.png">
+            <img src="s4.jpg">
+            <img src="s7.png">
+            <img src="s8.png">
+            <img src="s9.png">
+            <img src="s10.png">
+
+            <!-- duplicate for smooth scroll -->
+            <img src="s1.png">
+            <img src="s2.png">
+            <img src="s3.png">
+            <img src="s4.jpg">
+            <img src="s7.png">
+            <img src="s8.png">
+            <img src="s9.png">
+            <img src="s10.png">
         </div>
     </div>
 </footer>
