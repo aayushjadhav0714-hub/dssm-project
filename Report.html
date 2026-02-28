@@ -5,8 +5,10 @@
 <title>Disaster Incident Reporting System</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Font Awesome -->
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
+<!-- Leaflet -->
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -22,159 +24,488 @@
   --radius:14px;
   --success:#28a745;
   --danger:#dc3545;
+  --warning:#ffc107;
 }
 
-*{box-sizing:border-box; font-family:'Segoe UI', Arial, sans-serif}
+*{box-sizing:border-box;font-family:'Segoe UI',Arial,sans-serif}
 
-body{ margin:0; background:var(--bg); color:var(--text); }
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+}
 
+/* HEADER */
 header{
-  display:flex; justify-content:space-between; align-items:center;
-  padding:16px 20px; background:linear-gradient(135deg,var(--primary),var(--primary-dark));
-  color:#fff; box-shadow:0 4px 12px rgba(0,0,0,0.2);
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:16px 20px;
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  color:#fff;
+  box-shadow:0 4px 12px rgba(0,0,0,0.2);
 }
 
-header h1{font-size:18px; font-weight:700; margin:0; text-align:center; flex:1}
-header i{font-size:22px; cursor:pointer}
+header h1{font-size:18px;font-weight:700;margin:0;text-align:center;flex:1}
+header i{font-size:22px;cursor:pointer}
 
-.main{ max-width:900px; margin:20px auto; padding:0 15px; }
+/* CARD */
+.main{
+  max-width:900px;
+  margin:20px auto;
+  padding:0 15px;
+}
 
 .card{
-  background:#fff; border-radius:var(--radius);
-  box-shadow:0 20px 40px rgba(0,0,0,.1); overflow:hidden;
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:0 20px 40px rgba(0,0,0,.1);
+  overflow:hidden;
+  transition:0.3s;
 }
 
 .card-header{
-  padding:20px; border-bottom:1px solid var(--border);
-  background:linear-gradient(135deg,var(--primary),var(--primary-dark)); color:#fff;
+  padding:20px;
+  border-bottom:1px solid var(--border);
+  background:linear-gradient(135deg,var(--primary),var(--primary-dark));
+  color:#fff;
 }
 
-.card-header h2{margin:0; font-size:20px}
+.card-header h2{margin:0;font-size:20px}
+.card-header p{margin-top:6px;font-size:13px;color:#e0e0e0}
 
 form{padding:20px}
 
+/* Sections */
 .section{
-  margin-bottom:25px; padding:16px; border-radius:var(--radius);
-  border:1px solid #e2e8f0; background:#fafafa;
+  margin-bottom:25px;
+  padding:16px;
+  border-radius:var(--radius);
+  border:1px solid #e2e8f0;
+  background:#fafafa;
+  transition:0.3s;
 }
 
-.section-title{ font-size:15px; font-weight:700; margin-bottom:12px; display:flex; gap:8px; align-items:center; }
+.section:hover{box-shadow:0 6px 20px rgba(0,0,0,0.05)}
+
+.section-title{
+  font-size:15px;
+  font-weight:700;
+  margin-bottom:12px;
+  display:flex;
+  gap:8px;
+  align-items:center;
+}
+
 .section-title i{color:var(--primary)}
 
-.grid{ display:grid; grid-template-columns:1fr; gap:14px; }
-@media(min-width:700px){ .grid{grid-template-columns:1fr 1fr} }
-
-.field{display:flex; flex-direction:column; position:relative}
-label{ font-size:13px; color:var(--muted); margin-bottom:5px; }
-label.required::after{ content:" *"; color:var(--danger); }
-
-input, select, textarea{
-  padding:12px; border-radius:10px; border:1px solid var(--border); font-size:14px; transition:0.3s;
+/* GRID */
+.grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
 }
 
-input:focus, select:focus, textarea:focus{
-  outline:none; border-color:var(--primary); box-shadow:0 0 0 4px rgba(11,94,215,.2);
+@media(min-width:700px){
+  .grid{grid-template-columns:1fr 1fr}
 }
 
-textarea{height:100px; resize:none}
+/* FIELDS */
+.field{display:flex;flex-direction:column;position:relative}
+label{
+  font-size:13px;
+  color:var(--muted);
+  margin-bottom:5px;
+}
 
-#map{ height:300px; width:100%; border-radius:12px; margin-top:10px; border:1px solid var(--border); }
+label.required::after{
+  content:" *";
+  color:var(--danger);
+}
 
+input,select,textarea{
+  padding:12px;
+  border-radius:10px;
+  border:1px solid var(--border);
+  font-size:14px;
+  transition:0.3s;
+}
+
+input:focus,select:focus,textarea:focus{
+  outline:none;
+  border-color:var(--primary);
+  box-shadow:0 0 0 4px rgba(11,94,215,.2);
+}
+
+textarea{resize:none;height:120px}
+
+/* MAP */
+#mapContainer{
+  display:block;
+  margin-top:10px;
+  position:relative;
+}
+
+#map{
+  height:300px;
+  width:100%;
+  border-radius:12px;
+  border:1px solid var(--border);
+}
+
+/* FILE UPLOAD */
 .file-box{
-  border:2px dashed var(--border); border-radius:12px; padding:16px;
-  text-align:center; font-size:13px; color:var(--muted); cursor:pointer;
+  border:2px dashed var(--border);
+  border-radius:12px;
+  padding:16px;
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+  cursor:pointer;
+  transition:0.3s;
 }
 
-#filePreview img{ width:100px; height:70px; object-fit:cover; border-radius:6px; margin:5px; border:1px solid var(--border); }
+.file-box:hover{background:#f0f4ff}
 
-.actions{ display:flex; gap:10px; margin-top:15px; }
-button{ flex:1; padding:12px; border-radius:12px; border:none; font-weight:700; cursor:pointer; }
-.btn-secondary{ background:#eef2ff; color:var(--primary); }
-.btn-primary{ background:var(--primary); color:#fff; }
+/* FILE PREVIEW */
+#filePreview{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:10px;
+}
 
-/* Modal */
+#filePreview img, #filePreview video{
+  width:100px;
+  height:70px;
+  object-fit:cover;
+  border-radius:6px;
+  border:1px solid var(--border);
+}
+
+/* FOOTER */
+.form-footer{
+  border-top:1px solid var(--border);
+  padding-top:16px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+button{
+  flex:1;
+  padding:12px;
+  border-radius:12px;
+  border:none;
+  font-weight:700;
+  font-size:14px;
+  cursor:pointer;
+  transition:0.3s;
+}
+
+button:hover{opacity:0.9}
+
+.btn-secondary{
+  background:#eef2ff;
+  color:var(--primary);
+}
+
+.btn-primary{
+  background:var(--primary);
+  color:#fff;
+}
+
+/* MODAL POPUP */
 #popupModal{
-  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
-  background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;
+  display:none;
+  position:fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background:rgba(0,0,0,0.6);
+  z-index:1000;
+  justify-content:center;
+  align-items:center;
+  padding:15px;
 }
-.modal-content{ background:#fff; padding:25px; border-radius:16px; max-width:400px; text-align:center; }
-.modal-content button{ background:var(--success); color:#fff; width:100%; margin-top:15px; }
+
+#popupModal .modal-content{
+  background:#fff;
+  padding:25px 20px;
+  border-radius:16px;
+  max-width:480px;
+  width:100%;
+  text-align:left;
+  box-shadow:0 15px 40px rgba(0,0,0,0.25);
+  animation:fadeIn 0.4s ease;
+  overflow-y:auto;
+  max-height:90vh;
+}
+
+#popupModal h3{
+  color:var(--primary);
+  margin-bottom:12px;
+  font-size:20px;
+  text-align:center;
+}
+
+#popupModal p, #popupModal ul{
+  font-size:15px;
+  color:var(--text);
+  line-height:1.6;
+}
+
+#popupModal ul{
+  margin:8px 0;
+  padding-left:20px;
+}
+
+#popupModal button{
+  margin-top:18px;
+  background:var(--success);
+  color:#fff;
+  padding:12px 0;
+  font-size:15px;
+  border-radius:10px;
+  width:100%;
+  font-weight:600;
+}
+
+@keyframes fadeIn{
+  from {opacity:0; transform:translateY(-20px);}
+  to {opacity:1; transform:translateY(0);}
+}
+
+/* VERY SMALL SCREEN FIXES */
+@media(max-width:480px){
+  header h1{font-size:16px;}
+  .card-header h2{font-size:18px;}
+  .card-header p{font-size:12px;}
+  textarea{height:100px;}
+  #map{height:250px;}
+  #filePreview img, #filePreview video{width:90px;height:60px;}
+  .section-title{font-size:14px;}
+}
 </style>
 </head>
 <body>
 
 <header>
-  <i class="fas fa-arrow-left" onclick="location.href='Home.html'"></i>
+  <i class="fas fa-arrow-left"></i>
   <h1>Disaster Rescue Management</h1>
   <i class="fas fa-bell"></i>
 </header>
 
 <div class="main">
-  <div class="card">
-    <div class="card-header">
-      <h2>Disaster Incident Report</h2>
+<div class="card">
+
+<div class="card-header">
+  <h2>Disaster Incident Report</h2>
+  <p>Report emergency incidents accurately to ensure fast response</p>
+</div>
+
+<form id="reportForm">
+
+<!-- Reporter -->
+<div class="section">
+  <div class="section-title">
+    <i class="fas fa-user-shield"></i> Reporter Information
+  </div>
+
+  <div class="grid">
+    <div class="field">
+      <label class="required">Full Name</label>
+      <input name="fullname" required>
     </div>
-
-    <form id="reportForm">
-      <div class="section">
-        <div class="section-title"><i class="fas fa-user-shield"></i> Reporter Information</div>
-        <div class="grid">
-          <div class="field">
-            <label class="required">Full Name</label>
-            <input type="text" name="fullname" required>
-          </div>
-          <div class="field">
-            <label class="required">Mobile Number</label>
-            <input type="tel" name="mobile" required>
-          </div>
-        </div>
-      </div>
-
-      <div class="section">
-        <div class="section-title"><i class="fas fa-triangle-exclamation"></i> Incident Details</div>
-        <div class="grid">
-          <div class="field">
-            <label class="required">Disaster Type</label>
-            <select name="disasterType" required>
-              <option value="">Select</option>
-              <option>Flood</option>
-              <option>Fire</option>
-              <option>Earthquake</option>
-              <option>Cyclone</option>
-            </select>
-          </div>
-          <div class="field">
-            <label class="required">Date & Time</label>
-            <input type="datetime-local" id="datetimeInput" name="datetime" required>
-          </div>
-          <div class="field" style="grid-column:1/-1">
-            <label class="required">Location</label>
-            <input id="locationInput" name="location" readonly required>
-            <div id="map"></div>
-          </div>
-          <div class="field" style="grid-column:1/-1">
-            <label>Description</label>
-            <textarea name="description" placeholder="Any additional details..."></textarea>
-          </div>
-        </div>
-      </div>
-
-      <div class="actions">
-        <button type="reset" class="btn-secondary">Clear</button>
-        <button type="submit" class="btn-primary">Submit Report</button>
-      </div>
-    </form>
+    <div class="field">
+      <label class="required">Mobile Number</label>
+      <input type="tel" name="mobile" required>
+    </div>
   </div>
 </div>
 
+<!-- Incident -->
+<div class="section">
+  <div class="section-title">
+    <i class="fas fa-triangle-exclamation"></i> Incident Details
+  </div>
+
+  <div class="grid">
+    <div class="field">
+      <label class="required">Disaster Type</label>
+      <select name="disasterType" required>
+        <option value="">Select</option>
+        <option>Flood</option>
+        <option>Fire</option>
+        <option>Earthquake</option>
+        <option>Cyclone</option>
+        <option>Other</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label class="required">Date & Time</label>
+      <input type="datetime-local" id="datetimeInput" name="datetime" required>
+    </div>
+
+    <div class="field" style="grid-column:1/-1">
+      <label class="required">Location</label>
+      <input id="locationInput" readonly placeholder="Detecting your live location..." required>
+      <div id="mapContainer">
+        <div id="map"></div>
+      </div>
+    </div>
+
+    <div class="field" style="grid-column:1/-1">
+      <label>Description</label>
+      <textarea name="description" placeholder="Optional details..."></textarea>
+    </div>
+  </div>
+</div>
+
+<!-- Evidence -->
+<div class="section">
+  <div class="section-title">
+    <i class="fas fa-camera"></i> Evidence Upload
+  </div>
+  <div class="file-box" id="fileBox">
+    Click to upload photos or videos
+    <input type="file" id="fileInput" multiple accept="image/*,video/*" style="display:none">
+  </div>
+  <div id="filePreview"></div>
+</div>
+
+<div class="form-footer">
+  <small style="color:var(--muted)">
+    ⚠ False reporting is punishable under law.
+  </small>
+
+  <div class="actions">
+    <button type="reset" class="btn-secondary">Clear</button>
+    <button type="submit" class="btn-primary">Submit</button>
+  </div>
+</div>
+
+</form>
+</div>
+</div>
+
+<!-- PROFESSIONAL MODAL POPUP -->
 <div id="popupModal">
   <div class="modal-content">
-    <h3>✅ Success!</h3>
-    <p>Your report has been submitted. Emergency teams are notified.</p>
+    <h3>✅ Report Submitted Successfully</h3>
+    <p>
+      Thank you for reporting the incident. Our disaster response team has received your report.<br><br>
+      <strong>Next Steps:</strong>
+      <ul>
+        <li>Stay calm and remain at a safe location.</li>
+        <li>Emergency responders have been notified and are on their way.</li>
+        <li>Your reported location: <span id="modalLocation"></span></li>
+      </ul>
+      <strong>Estimated Response Time:</strong> 15–30 minutes.<br>
+      For urgent assistance, call: <strong>+91-123-456-7890</strong>.
+    </p>
     <button id="closeModal">OK</button>
   </div>
 </div>
 
+<script>
+/* DATE & TIME AUTO-FILL */
+const datetimeInput = document.getElementById("datetimeInput");
+function setCurrentDateTime(){
+  const now = new Date();
+  const local = new Date(now.getTime() - now.getTimezoneOffset()*60000);
+  datetimeInput.value = local.toISOString().slice(0,16);
+}
+setCurrentDateTime();
 
+/* FILE UPLOAD PREVIEW */
+const fileBox = document.getElementById("fileBox");
+const fileInput = document.getElementById("fileInput");
+const filePreview = document.getElementById("filePreview");
+fileBox.addEventListener("click", ()=>fileInput.click());
+fileInput.addEventListener("change", () => {
+  filePreview.innerHTML = "";
+  Array.from(fileInput.files).forEach(file => {
+    if(file.type.startsWith("image/")){
+      const img = document.createElement("img");
+      img.src = URL.createObjectURL(file);
+      filePreview.appendChild(img);
+    } else if(file.type.startsWith("video/")){
+      const vid = document.createElement("video");
+      vid.src = URL.createObjectURL(file);
+      vid.controls = true;
+      filePreview.appendChild(vid);
+    }
+  });
+});
+
+/* MAP - LIVE LOCATION */
+let map, marker;
+const locationInput = document.getElementById("locationInput");
+function initMap(lat,lng){
+  map = L.map("map").setView([lat,lng],13);
+  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(map);
+  marker = L.marker([lat,lng],{draggable:true}).addTo(map);
+  locationInput.value = `Lat ${lat.toFixed(6)}, Lng ${lng.toFixed(6)}`;
+  marker.on("dragend", e=>locationInput.value=`Lat ${e.target.getLatLng().lat.toFixed(6)}, Lng ${e.target.getLatLng().lng.toFixed(6)}`);
+  map.on("click", e=>{marker.setLatLng(e.latlng); locationInput.value=`Lat ${e.latlng.lat.toFixed(6)}, Lng ${e.latlng.lng.toFixed(6)}`});
+}
+if(navigator.geolocation){
+  navigator.geolocation.getCurrentPosition(pos=>initMap(pos.coords.latitude,pos.coords.longitude),
+  ()=>initMap(19.0760,72.8777));
+}else{initMap(19.0760,72.8777)}
+
+/* FORM SUBMIT - SHOW PROFESSIONAL POPUP */
+const form = document.getElementById("reportForm");
+const modal = document.getElementById("popupModal");
+const closeModal = document.getElementById("closeModal");
+const modalLocation = document.getElementById("modalLocation");
+
+form.addEventListener("submit", e=>{
+  e.preventDefault();
+  modalLocation.textContent = locationInput.value;
+  modal.style.display = "flex";
+});
+
+closeModal.addEventListener("click", ()=>{
+  modal.style.display = "none";
+  form.reset();
+  filePreview.innerHTML = "";
+  setCurrentDateTime();
+});
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const data = {
+    fullname: form.fullname.value,
+    mobile: form.mobile.value,
+    disasterType: form.disasterType.value,
+    location: locationInput.value,
+    datetime: form.datetime.value,
+    description: form.description.value
+  };
+
+  try {
+    const response = await fetch('http://localhost:3000/submit-report', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+
+    if(response.ok) {
+        modalLocation.textContent = locationInput.value;
+        modal.style.display = "flex";
+    }
+  } catch (err) {
+      alert("Server connect hot nahiye!");
+  }
+});
+</script>
 </body>
 </html>
