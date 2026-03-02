@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Emergency Contact Numbers | Disaster Rescue Management</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+:root{
+  --primary:#0b5ed7;
+  --primary-dark:#084298;
+  --bg:#f4f6fb;
+  --card:#ffffff;
+  --text:#1f2937;
+  --muted:#6b7280;
+  --border:#e5e7eb;
+  --radius:14px;
+  --shadow:0 10px 25px rgba(0,0,0,.08);
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:"Segoe UI",Roboto,Arial,sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+/* HEADER */
+header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px 28px;
+    background:linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color:#fff;
+    box-shadow:0 8px 25px rgba(0,0,0,0.2);
+}
+
+header h1{
+    font-size:18px;
+    font-weight:600;
+}
+
+header i{
+    font-size:20px;
+    cursor:pointer;
+}
+
+/* PAGE TITLE */
+.page-title{
+  padding:18px 24px 10px;
+}
+
+.page-title h2{
+  margin:0;
+  font-size:22px;
+  font-weight:600;
+}
+
+/* TABLE CONTAINER */
+.table-wrapper{
+  margin:0 18px 40px;
+  background:#fff;
+  border-radius:var(--radius);
+  box-shadow:var(--shadow);
+  overflow-x:auto;
+}
+
+/* TABLE */
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:500px;
+}
+
+thead{
+  background:#eef2ff;
+}
+
+thead th{
+  padding:14px;
+  font-size:13px;
+  text-align:left;
+  color:#374151;
+  border-bottom:1px solid var(--border);
+}
+
+tbody td{
+  padding:14px;
+  font-size:14px;
+  border-bottom:1px solid var(--border);
+}
+
+tbody tr:hover{
+  background:#f9fafb;
+}
+
+.icon{
+  color:var(--primary);
+  font-size:18px;
+  margin-right:8px;
+}
+
+.number a{
+  font-weight:700;
+  font-size:16px;
+  color:#0b5ed7;
+  text-decoration:none;
+}
+
+.number a:hover{
+  text-decoration:underline;
+}
+
+.tag{
+  padding:4px 10px;
+  font-size:11px;
+  border-radius:999px;
+  background:#eef2ff;
+  color:var(--primary);
+  font-weight:600;
+}
+
+/* MOBILE OPTIMIZATION */
+@media(max-width:600px){
+  table{
+    font-size:13px;
+  }
+  .number a{
+    font-size:15px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+    <i class="fas fa-arrow-left" onclick="location.href='Home.html'"></i>
+    <h1>Disaster Rescue Management</h1>
+    <i class="fas fa-bell"></i>
+</header>
+
+<!-- TITLE -->
+<div class="page-title">
+  <h2>Emergency Contact Numbers</h2>
+</div>
+
+<!-- TABLE -->
+<div class="table-wrapper">
+<table>
+  <thead>
+    <tr>
+      <th>Service</th>
+      <th>Category</th>
+      <th>Contact Number</th>
+      <th>Authority</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><i class="fa-solid fa-phone-volume icon"></i>All-in-One Emergency</td>
+      <td>National</td>
+      <td class="number"><a href="tel:112">112</a></td>
+      <td><span class="tag">Government of India</span></td>
+    </tr>
+
+    <tr>
+      <td><i class="fa-solid fa-fire-extinguisher icon"></i>Fire & Rescue</td>
+      <td>Fire Services</td>
+      <td class="number"><a href="tel:101">101</a></td>
+      <td>State Fire Dept.</td>
+    </tr>
+
+    <tr>
+      <td><i class="fa-solid fa-truck-medical icon"></i>Ambulance</td>
+      <td>Medical Emergency</td>
+      <td class="number"><a href="tel:108">108</a></td>
+      <td>Health Services</td>
+    </tr>
+
+    <tr>
+      <td><i class="fa-solid fa-user-shield icon"></i>Police</td>
+      <td>Law & Order</td>
+      <td class="number"><a href="tel:100">100</a></td>
+      <td>Police Department</td>
+    </tr>
+
+    <tr>
+      <td><i class="fa-solid fa-person-drowning icon"></i>Disaster Management</td>
+      <td>NDMA</td>
+      <td class="number"><a href="tel:1078">1078</a></td>
+      <td><span class="tag">NDMA</span></td>
+    </tr>
+
+    <tr>
+      <td><i class="fa-solid fa-child icon"></i>Child Helpline</td>
+      <td>Child Safety</td>
+      <td class="number"><a href="tel:1098">1098</a></td>
+      <td>Ministry of Women & Child Dev.</td>
+    </tr>
+
+    <tr>
+      <td><i class="fa-solid fa-person-dress icon"></i>Women Helpline</td>
+      <td>Women Safety</td>
+      <td class="number"><a href="tel:181">181</a></td>
+      <td>State Govt.</td>
+    </tr>
+
+    <tr>
+      <td><i class="fa-solid fa-heart-pulse icon"></i>Health Helpline</td>
+      <td>Medical Support</td>
+      <td class="number"><a href="tel:104">104</a></td>
+      <td>Health Dept.</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+</body>
+</html>
