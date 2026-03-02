@@ -228,132 +228,86 @@ textarea{resize:none;height:120px}
 </div>
 
 <script>
-// ================= SUPABASE CONFIG =================
+// 🔹 SUPABASE CONFIG
 const SUPABASE_URL = 'https://idogfmuksxbjjmrfdclk.supabase.co'; 
 const SUPABASE_KEY = 'sb_publishable_49Wi0aMQU0u1YF4nF3PQvg_WbwUscRs';
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ================= ELEMENTS =================
-const form = document.getElementById("reportForm");
+// 🔹 AUTO DATE-TIME FUNCTION
 const datetimeInput = document.getElementById("datetimeInput");
-const locationInput = document.getElementById("locationInput");
 
-let map, marker;
-
-// ================= AUTO DATE TIME (Mobile Safe) =================
 function setCurrentDateTime(){
   const now = new Date();
   const local = new Date(now.getTime() - now.getTimezoneOffset() * 60000);
   datetimeInput.value = local.toISOString().slice(0,16);
 }
 
-setCurrentDateTime();
+setCurrentDateTime(); // page load var auto fill
 
-// Fallback for iPhone Safari
-if (!datetimeInput.value) {
-  const now = new Date();
-  datetimeInput.value = now.toISOString().slice(0,16);
-}
+// 🔹 MAP LOGIC
+let map, marker;
+const locationInput = document.getElementById("locationInput");
 
-// ================= MAP INIT (Mobile Safe) =================
 function initMap(lat, lng) {
+    map = L.map("map").setView([lat, lng], 15);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png").addTo(map);
+    marker = L.marker([lat, lng], {draggable: true}).addTo(map);
+    updateLocationText(lat, lng);
 
-  if (map) return;
-
-  map = L.map("map", {
-    zoomControl: true,
-    tap: true
-  }).setView([lat, lng], 15);
-
-  L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 19
-  }).addTo(map);
-
-  marker = L.marker([lat, lng], { draggable: true }).addTo(map);
-
-  updateLocation(lat, lng);
-
-  marker.on("dragend", function(e) {
-    const pos = e.target.getLatLng();
-    updateLocation(pos.lat, pos.lng);
-  });
-
-  map.on("click", function(e){
-    marker.setLatLng(e.latlng);
-    updateLocation(e.latlng.lat, e.latlng.lng);
-  });
+    marker.on("dragend", e => {
+        const pos = e.target.getLatLng();
+        updateLocationText(pos.lat, pos.lng);
+    });
 }
 
-function updateLocation(lat, lng){
-  locationInput.value = `Lat ${lat.toFixed(6)}, Lng ${lng.toFixed(6)}`;
+function updateLocationText(lat, lng) {
+    locationInput.value = `Lat ${lat.toFixed(6)}, Lng ${lng.toFixed(6)}`;
 }
 
-// ================= GEOLOCATION SAFE =================
-if (navigator.geolocation) {
+navigator.geolocation.getCurrentPosition(
+  (position) => {
+    initMap(position.coords.latitude, position.coords.longitude);
+  },
+  (error) => {
+    console.log("Location error:", error.message);
+    initMap(19.0760, 72.8777); // fallback Mumbai
+  },
+  {
+    enableHighAccuracy: false,  // 🔥 fast mode
+    timeout: 5000,              // max 5 sec wait
+    maximumAge: 60000           // last known location use kara (1 min)
+  }
+);
 
-  navigator.geolocation.getCurrentPosition(
-    function(pos){
-      initMap(pos.coords.latitude, pos.coords.longitude);
-    },
-    function(){
-      initMap(19.0760, 72.8777); // Mumbai fallback
-    },
-    {
-      enableHighAccuracy:false,
-      timeout:4000,
-      maximumAge:60000
+// 🔹 FORM SUBMIT
+const form = document.getElementById("reportForm");
+
+form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const reportData = {
+        fullname: document.getElementById("fullname").value,
+        mobile: document.getElementById("mobile").value,
+        location: locationInput.value,
+        datetime: datetimeInput.value,
+    };
+
+    const { error } = await _supabase
+        .from('Report')
+        .insert([reportData]);
+
+    if (!error) {
+        document.getElementById("popupModal").style.display = "flex";
+    } else {
+        alert(error.message);
     }
-  );
-
-} else {
-  initMap(19.0760, 72.8777);
-}
-
-// ================= FORM SUBMIT =================
-form.addEventListener("submit", async function(e){
-  e.preventDefault();
-
-  const btn = form.querySelector("button");
-  btn.disabled = true;
-  btn.innerText = "Submitting...";
-
-  const reportData = {
-    fullname: document.getElementById("fullname").value.trim(),
-    mobile: document.getElementById("mobile").value.trim(),
-    disasterType: document.getElementById("disasterType").value,
-    location: locationInput.value,
-    datetime: datetimeInput.value,
-    description: document.getElementById("description").value.trim()
-  };
-
-  // Mobile safety validation
-  if(!reportData.location){
-    alert("Please select location on map.");
-    btn.disabled = false;
-    btn.innerText = "Submit Report";
-    return;
-  }
-
-  const { error } = await _supabase
-    .from("Report")
-    .insert([reportData]);
-
-  if(error){
-    alert("Error: " + error.message);
-    btn.disabled = false;
-    btn.innerText = "Submit Report";
-  } else {
-    document.getElementById("popupModal").style.display = "flex";
-  }
 });
 
-// ================= RESET =================
 function closeMyModal(){
-  document.getElementById("popupModal").style.display="none";
-  form.reset();
-  setCurrentDateTime();
+    document.getElementById("popupModal").style.display="none";
+    form.reset();
+    setCurrentDateTime(); // reset nantar punha auto fill
 }
 </script>
-
 </body>
 </html>
